@@ -51,4 +51,20 @@ public class Character : MonoBehaviour
     {
         _rigidBody2D.MovePosition(transform.position + _moveDir * _speed * Time.fixedDeltaTime);
     }
+
+    private void OnCollisionEnter2D(Collision2D collsion)
+    {
+        if (collsion.collider.gameObject.tag == "Projectile")
+        {
+            Debug.Log("Damage");
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D collider)
+    {
+        if (collider.gameObject.tag == "Enemy")
+        {
+            Debug.Log("Damage");
+        }
+    }
 }
