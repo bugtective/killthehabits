@@ -176,6 +176,7 @@ GameObject:
   m_Component:
   - component: {fileID: 303381697}
   - component: {fileID: 303381698}
+  - component: {fileID: 303381699}
   - component: {fileID: 303381696}
   - component: {fileID: 303381695}
   - component: {fileID: 303381694}
@@ -309,8 +310,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bdf29b6572f170940a7764c8c10a6293, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _playBulletsPool: {fileID: 1139384786}
   _character: {fileID: 1013840536}
+  _bulletShooter: {fileID: 303381699}
+--- !u!114 &303381699
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 303381693}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 981fd1c0877b0bc4c88801f9bc9b5512, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _playBulletsPool: {fileID: 1139384786}
+  _amountPerRound: 3
+  _rounds: 3
+  _projectileTimeInterval: 0.3
+  _roundTimeInterval: 1
 --- !u!1 &492017805
 GameObject:
   m_ObjectHideFlags: 0

@@ -14,10 +14,7 @@ public class PlayBullet : PoolableObject
 
     public void Shoot(Transform target)
     {
-        //_rigidbody2d.AddForce(_rigidbody2d.transform.forward * m_Speed);
-
-        _rigidbody2d.velocity = (target.position - transform.position).normalized * _speed; 
-        //clone.velocity.y=0;
+        _rigidbody2d.velocity = (target.position - transform.position).normalized * _speed;
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -32,7 +29,7 @@ public class PlayBullet : PoolableObject
 
     private void ResolveCollision(Collider2D collider)
     {
-        if (collider.gameObject.tag != "Enemy")
+        if (collider.gameObject.tag != "Enemy" && collider.gameObject.tag != "Projectile")
         {
             Reset();
         }

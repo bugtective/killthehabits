@@ -2,23 +2,74 @@ using UnityEngine;
 
 public class Monster : MonoBehaviour
 {
-    [SerializeField] private ObjectPool _playBulletsPool = default;
+    private enum MonsterState
+    {
+        None,
+        Appearing,
+        Moving,
+        ShootingPlays,
+        SpawningBombs,
+        SpawningTVs
+    }
 
     [SerializeField] private Character _character = default;
 
-    private float _time = 0f;
+    [SerializeField] private BulletShooter _bulletShooter = default;
 
+    private Timer _timer = new Timer();
+
+    private MonsterState _currentState = MonsterState.None;
+
+    private void Awake()
+    {
+        ChangeState(MonsterState.Appearing);
+    }
 
     private void Update()
     {
-        _time += Time.deltaTime;
+        _timer.Update(Time.deltaTime);
+    }
 
-        if (_time > 2f)
+    private void ChangeState(MonsterState newState)
+    {
+        _currentState = newState;
+        
+        //Debug.Log($"--- Mode: {_currentState.ToString()} ---");
+
+        switch (_currentState)
         {
-            _time = 0f;
+            case MonsterState.Appearing:
+            {
+                _timer.StartCountDown(1f, FinishAppearing);
+            }
+            break;
 
-            var poolObject = _playBulletsPool.GetObject();
-            poolObject?.GetComponent<PlayBullet>().Shoot(_character.transform);
+            case MonsterState.Moving:
+            {
+                _timer.StartCountDown(1f, FinishMoving);
+            }
+            break;
+
+            case MonsterState.ShootingPlays:
+            {
+                _bulletShooter.Activate(_character.transform, FinishShooting);
+            }
+            break;
         }
+    }
+
+    private void FinishAppearing()
+    {
+        ChangeState(MonsterState.ShootingPlays);
+    }
+
+    private void FinishMoving()
+    {
+        ChangeState(MonsterState.ShootingPlays);
+    }
+
+    private void FinishShooting()
+    {
+        ChangeState(MonsterState.Moving);
     }
 }
