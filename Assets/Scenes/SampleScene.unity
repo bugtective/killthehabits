@@ -177,6 +177,7 @@ GameObject:
   - component: {fileID: 303381697}
   - component: {fileID: 303381698}
   - component: {fileID: 303381699}
+  - component: {fileID: 303381700}
   - component: {fileID: 303381696}
   - component: {fileID: 303381695}
   - component: {fileID: 303381694}
@@ -211,7 +212,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 4, y: 4}
+  m_Size: {x: 3.5074263, y: 3.2611408}
   m_EdgeRadius: 0
 --- !u!50 &303381695
 Rigidbody2D:
@@ -312,6 +313,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _character: {fileID: 1013840536}
   _bulletShooter: {fileID: 303381699}
+  _lungeAttack: {fileID: 303381700}
 --- !u!114 &303381699
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -329,6 +331,21 @@ MonoBehaviour:
   _rounds: 3
   _projectileTimeInterval: 0.3
   _roundTimeInterval: 1
+--- !u!114 &303381700
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 303381693}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d430cd1cab53ffa4d99f5e54820dbe91, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _preparingTime: 2
+  _speed: 20
+  _attacksAmount: 3
 --- !u!1 &492017805
 GameObject:
   m_ObjectHideFlags: 0
@@ -3159,7 +3176,7 @@ GameObject:
   - component: {fileID: 1443675940}
   m_Layer: 0
   m_Name: CollisionTileMap
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

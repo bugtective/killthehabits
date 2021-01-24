@@ -12,8 +12,9 @@ public class PlayBullet : PoolableObject
         _rigidbody2d = GetComponent<Rigidbody2D>();
     }
 
-    public void Shoot(Transform target)
+    public void Shoot(Vector3 origin,Transform target)
     {
+        transform.position = origin;
         _rigidbody2d.velocity = (target.position - transform.position).normalized * _speed;
     }
 

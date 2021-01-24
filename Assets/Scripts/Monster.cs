@@ -15,6 +15,7 @@ public class Monster : MonoBehaviour
     [SerializeField] private Character _character = default;
 
     [SerializeField] private BulletShooter _bulletShooter = default;
+    [SerializeField] private LungeAttack _lungeAttack = default;
 
     private Timer _timer = new Timer();
 
@@ -46,7 +47,7 @@ public class Monster : MonoBehaviour
 
             case MonsterState.Moving:
             {
-                _timer.StartCountDown(1f, FinishMoving);
+                _lungeAttack.Activate(_character.transform, FinishMoving);
             }
             break;
 
@@ -60,7 +61,7 @@ public class Monster : MonoBehaviour
 
     private void FinishAppearing()
     {
-        ChangeState(MonsterState.ShootingPlays);
+        ChangeState(MonsterState.Moving);
     }
 
     private void FinishMoving()

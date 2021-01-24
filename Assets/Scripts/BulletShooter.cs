@@ -1,7 +1,7 @@
 using UnityEngine;
 using System;
 
-public class BulletShooter : MonoBehaviour
+public class BulletShooter : AttackPattern
 {
     [SerializeField] private ObjectPool _playBulletsPool = default;
  
@@ -20,29 +20,6 @@ public class BulletShooter : MonoBehaviour
     private int _currentProjectileAmount = 0;
     private int _currentAttackRound = 0;
 
-    private Timer _timer = new Timer();
-
-    private Transform _target = default;
-
-    private Action  _onFinishCallback = default;
-
-    private void Awake()
-    {
-        enabled = false;
-    }
-
-    public void Activate(Transform target, Action finishCallback)
-    {
-        _target = target;
-        _onFinishCallback = finishCallback;
-        enabled = true;
-    }
-
-    private void Update()
-    {
-        _timer.Update(Time.deltaTime);
-    }
-
     private void OnEnable()
     {
         _currentProjectileAmount = 0;
@@ -50,10 +27,15 @@ public class BulletShooter : MonoBehaviour
         _timer.StartCountDown(_projectileTimeInterval, Shoot);
     }
 
+    private void Update()
+    {
+        _timer.Update(Time.deltaTime);
+    }
+    
     private void Shoot()
     {
         var poolObject = _playBulletsPool.GetObject();
-        poolObject.GetComponent<PlayBullet>().Shoot(_target);
+        poolObject.GetComponent<PlayBullet>().Shoot(transform.position, _target);
 
         _currentProjectileAmount++;
         
@@ -64,8 +46,7 @@ public class BulletShooter : MonoBehaviour
             
             if (_currentAttackRound >= _rounds)
             {
-                _onFinishCallback?.Invoke();
-                enabled = false;
+               FinishAttack();
             }
             else
             {

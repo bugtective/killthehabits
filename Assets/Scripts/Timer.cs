@@ -6,7 +6,7 @@ public class Timer
     private float _currentTime = 0f;
     private float _duration = 0f;
     private bool _active = false;
-
+    
     private Action _OnCountdownEnd = default;
 
     public void Update(float dt)
