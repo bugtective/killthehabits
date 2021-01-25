@@ -16,6 +16,7 @@ public class Monster : MonoBehaviour
 
     [SerializeField] private BulletShooter _bulletShooter = default;
     [SerializeField] private LungeAttack _lungeAttack = default;
+    [SerializeField] private SpawnBombs _spawnBombs = default;
 
     private Timer _timer = new Timer();
 
@@ -23,7 +24,7 @@ public class Monster : MonoBehaviour
 
     private void Awake()
     {
-        ChangeState(MonsterState.Appearing);
+        ChangeState(MonsterState.SpawningBombs);
     }
 
     private void Update()
@@ -56,12 +57,18 @@ public class Monster : MonoBehaviour
                 _bulletShooter.Activate(_character.transform, FinishShooting);
             }
             break;
+
+            case MonsterState.SpawningBombs:
+            {
+                _spawnBombs.Activate(_character.transform, FinishBombing);
+            }
+            break;
         }
     }
 
     private void FinishAppearing()
     {
-        ChangeState(MonsterState.Moving);
+        ChangeState(MonsterState.SpawningBombs);
     }
 
     private void FinishMoving()
@@ -72,5 +79,10 @@ public class Monster : MonoBehaviour
     private void FinishShooting()
     {
         ChangeState(MonsterState.Moving);
+    }
+
+    private void FinishBombing()
+    {
+        ChangeState(MonsterState.Appearing);
     }
 }

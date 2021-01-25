@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class Character : MonoBehaviour
 {
@@ -64,7 +62,11 @@ public class Character : MonoBehaviour
     {
         if (collider.gameObject.tag == "Enemy")
         {
-            Debug.Log("Damage");
+            Debug.Log("Enemy Damage");
+        }
+        else  if (collider.gameObject.tag == "Bomb")
+        {
+             Debug.Log("Bomb Damage");
         }
     }
 }

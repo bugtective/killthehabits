@@ -1,6 +1,5 @@
 using UnityEngine;
 
-
 public class PlayBullet : PoolableObject
 {
     [SerializeField] private float _speed = 10f;
