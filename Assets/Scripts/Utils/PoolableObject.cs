@@ -7,7 +7,7 @@ public class PoolableObject : MonoBehaviour
     public virtual void OnCreate(Transform parent)
     {
         transform.SetParent(parent);
-        Reset();
+        ReturnToPool();
     }
 
     public virtual void Take()
@@ -16,7 +16,7 @@ public class PoolableObject : MonoBehaviour
         gameObject.SetActive(true);
     }
 
-    public virtual void Reset()
+    public virtual void ReturnToPool()
     {
         transform.localPosition = Vector3.one;
         transform.localRotation = Quaternion.identity;

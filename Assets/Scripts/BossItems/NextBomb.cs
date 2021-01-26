@@ -24,6 +24,6 @@ public class NextBomb : PoolableObject
     private void Explode()
     {
         _colliderObject.SetActive(true);
-        _timer.StartCountDown(_explosionTime, Reset);
+        _timer.StartCountDown(_explosionTime, ReturnToPool);
     }
 }

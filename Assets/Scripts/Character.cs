@@ -68,5 +68,9 @@ public class Character : MonoBehaviour
         {
              Debug.Log("Bomb Damage");
         }
+        else  if (collider.gameObject.tag == "Ray")
+        {
+             Debug.Log("Ray Damage");
+        }
     }
 }

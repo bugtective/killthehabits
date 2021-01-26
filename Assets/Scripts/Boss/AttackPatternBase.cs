@@ -10,6 +10,11 @@ public class AttackPattern : MonoBehaviour
     private void Awake()
     {
         enabled = false;
+        OnAwake();
+    }
+
+    protected virtual void OnAwake()
+    {
     }
 
     public void Activate(Transform target, Action finishCallback)

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class SpawnBombs : AttackPattern
@@ -10,7 +11,30 @@ public class SpawnBombs : AttackPattern
     
     [SerializeField] private int _rounds = 3;
 
+    [Tooltip("Spawn Points Patterns")]
+    [SerializeField] private List<string> _patterns = new List<string>();
+
     private int _currentRound = 0;
+
+    private List<int[]> _patternsIdx = default;
+
+    protected override void OnAwake()
+    {
+        _patternsIdx = new List<int[]>();
+
+        // Parse Patterns
+        foreach (var pattern in _patterns)
+        {
+            string[] subs = pattern.Split(',');
+            int[] indexes = new int[subs.Length];
+            for (int i = 0; i < subs.Length; i++)
+            {
+                indexes[i] = int.Parse(subs[i]);
+            }
+
+            _patternsIdx.Add(indexes);
+        }
+    }
 
     private void OnEnable()
     {
@@ -25,7 +49,7 @@ public class SpawnBombs : AttackPattern
 
     private void DropBombs()
     {
-        var points = _spawnPoints.GetSpawnPoints();
+        var points = _spawnPoints.GetSpawnPoints(_patternsIdx);
 
         foreach (var point in points)
         {

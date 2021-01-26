@@ -31,7 +31,7 @@ public class PlayBullet : PoolableObject
     {
         if (collider.gameObject.tag != "Enemy" && collider.gameObject.tag != "Projectile")
         {
-            Reset();
+            ReturnToPool();
         }
     }
 }
