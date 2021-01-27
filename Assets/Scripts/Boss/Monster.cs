@@ -21,6 +21,9 @@ public class Monster : MonoBehaviour
     [SerializeField] private SpawnBombs _spawnBombs = default;
     [SerializeField] private SpawnTVsAttack _spawnTVs = default;
 
+    [SerializeField] private Animator _animator = default;
+    [SerializeField] private BossAnimationEvents _bossAnimationEvents = default;
+
     private Timer _timer = new Timer();
 
     private MonsterState _currentState = MonsterState.None;
@@ -28,6 +31,11 @@ public class Monster : MonoBehaviour
     private void Awake()
     {
         ChangeState(MonsterState.Appearing);
+
+        _bossAnimationEvents.OnAppearingEnding += () => {
+            _animator.Play("BossIdle");
+            OnFinishState();
+        };
     }
 
     private void Update()
@@ -45,7 +53,6 @@ public class Monster : MonoBehaviour
         {
             case MonsterState.Appearing:
             {
-                _timer.StartCountDown(1f, OnFinishState);
             }
             break;
 
