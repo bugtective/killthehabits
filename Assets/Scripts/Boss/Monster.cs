@@ -6,12 +6,14 @@ public class Monster : MonoBehaviour
     {
         None            = 0,
         Appearing       = 1,
-        Moving          = 2,
-        ShootingPlays   = 3,
-        SpawningBombs   = 4,
-        SpawningTVs     = 5,
+        Idle            = 2,
+        Preparing       = 3,
+        Moving          = 4,
+        ShootingPlays   = 5,
+        SpawningBombs   = 6,
+        SpawningTVs     = 7,
        
-        TotalStates     = 6,
+        TotalStates     = 8,
     }
 
     [SerializeField] private Character _character = default;
@@ -31,11 +33,8 @@ public class Monster : MonoBehaviour
     private void Awake()
     {
         ChangeState(MonsterState.Appearing);
-
-        _bossAnimationEvents.OnAppearingEnding += () => {
-            _animator.Play("BossIdle");
-            OnFinishState();
-        };
+        _bossAnimationEvents.OnAppearingEnding += OnAttackFinished;
+        _bossAnimationEvents.OnPreparingEnding += StartAttack;
     }
 
     private void Update()
@@ -56,42 +55,55 @@ public class Monster : MonoBehaviour
             }
             break;
 
+            case MonsterState.Idle:
+            {
+                _animator.Play("BossIdle");
+                _timer.StartCountDown(Random.Range(1f, 3f), () => {
+                    ChangeState(MonsterState.Preparing);
+                });
+            }
+            break;
+
+            case MonsterState.Preparing:
+            {
+                _animator.Play("BossPreparing");
+            }
+            break;
+
             case MonsterState.Moving:
             {
-                _lungeAttack.Activate(_character.transform, OnFinishState);
+                _lungeAttack.Activate(_character.transform, OnAttackFinished);
             }
             break;
 
             case MonsterState.ShootingPlays:
             {
-                _bulletShooter.Activate(_character.transform, OnFinishState);
+                _bulletShooter.Activate(_character.transform, OnAttackFinished);
             }
             break;
 
             case MonsterState.SpawningBombs:
             {
-                _spawnBombs.Activate(_character.transform, OnFinishState);
+                _spawnBombs.Activate(_character.transform, OnAttackFinished);
             }
             break;
 
             case MonsterState.SpawningTVs:
             {
-                _spawnTVs.Activate(_character.transform, OnFinishState);
+                _spawnTVs.Activate(_character.transform, OnAttackFinished);
             }
             break;
         }
     }
 
-    private void OnFinishState()
+    private void OnAttackFinished()
     {
-        MonsterState newState = MonsterState.None;
-        do
-        {
-            newState = (MonsterState)Random.Range(2, (int)MonsterState.TotalStates);
-        }
-        while (newState == _currentState);
+        ChangeState(MonsterState.Idle);
+    }
 
-        // For now, we simply randomize the behavior
-        ChangeState(newState);
+    private void StartAttack()
+    {
+        _animator.Play("BossAttack");
+        ChangeState((MonsterState)Random.Range(4, (int)MonsterState.TotalStates));
     }
 }
