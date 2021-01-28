@@ -9,10 +9,14 @@ public class Character : MonoBehaviour
 
     private Vector3 _moveDir = default;
 
+    private GameManager _gameManager = default;
+
     void Start()
     {
         _spriteRenderer = GetComponent<SpriteRenderer>();
         _rigidBody2D = GetComponent<Rigidbody2D>();
+
+        _gameManager = GameManager.Instance;
     }
 
     void Update()
@@ -54,7 +58,7 @@ public class Character : MonoBehaviour
     {
         if (collsion.collider.gameObject.tag == "Projectile")
         {
-            Debug.Log("Damage");
+           _gameManager.ReceiveDamage(_gameManager.PlayButtonDamage);
         }
     }
 
@@ -62,15 +66,15 @@ public class Character : MonoBehaviour
     {
         if (collider.gameObject.tag == "Enemy")
         {
-            Debug.Log("Enemy Damage");
+            _gameManager.ReceiveDamage(_gameManager.MonsterDamage);
         }
         else  if (collider.gameObject.tag == "Bomb")
         {
-             Debug.Log("Bomb Damage");
+            _gameManager.ReceiveDamage(_gameManager.NextEpisodeDamage);
         }
         else  if (collider.gameObject.tag == "Ray")
         {
-             Debug.Log("Ray Damage");
+            _gameManager.ReceiveDamage(_gameManager.RayDamage);
         }
     }
 }

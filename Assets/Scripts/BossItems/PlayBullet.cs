@@ -29,7 +29,7 @@ public class PlayBullet : PoolableObject
 
     private void ResolveCollision(Collider2D collider)
     {
-        if (collider.gameObject.tag != "Enemy" && collider.gameObject.tag != "Projectile")
+        if (collider.gameObject.tag != "Enemy" && collider.gameObject.tag != "Projectile" && collider.gameObject.tag != "Energy")
         {
             ReturnToPool();
         }

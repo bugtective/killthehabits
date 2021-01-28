@@ -12,9 +12,9 @@ public class Monster : MonoBehaviour
         Lunging,
         ShootingPlays,
         SpawningBombs,
-        SpawningTVs,
-       
+        //SpawningTVs,
         TotalStates     = 8,
+       
     }
 
     [SerializeField] private Character _character = default;
@@ -22,7 +22,7 @@ public class Monster : MonoBehaviour
     [SerializeField] private BulletShooter _bulletShooter = default;
     [SerializeField] private LungeAttack _lungeAttack = default;
     [SerializeField] private SpawnBombs _spawnBombs = default;
-    [SerializeField] private SpawnTVsAttack _spawnTVs = default;
+    // [SerializeField] private SpawnTVsAttack _spawnTVs = default;
 
     [SerializeField] private Animator _animator = default;
     [SerializeField] private BossAnimationEvents _bossAnimationEvents = default;
@@ -31,8 +31,7 @@ public class Monster : MonoBehaviour
 
     private MonsterState _currentState = MonsterState.None;
 
-
-   [SerializeField] private float _dissapearingDuration = 0.7f;
+    [SerializeField] private float _dissapearingDuration = 0.7f;
 
     private SpriteRenderer _spriteRenderer = default;
     private Color _originalColor = default;
@@ -41,14 +40,29 @@ public class Monster : MonoBehaviour
     private float _alphaValue = 0f;
     private MonsterState _dissapearingState = MonsterState.None;
 
+    private GameManager _gameManager = default;
+
     private void Awake()
     {
         _spriteRenderer = GetComponent<SpriteRenderer>();
         _originalColor = _spriteRenderer.sharedMaterial.color;
         
-        ChangeState(MonsterState.Appearing);
         _bossAnimationEvents.OnAppearingEnding += OnAttackFinished;
         _bossAnimationEvents.OnPreparingEnding += StartAttack;
+
+        _gameManager = GameManager.Instance;
+    }
+
+    public void AwakeBoss()
+    {
+        ChangeState(MonsterState.Appearing);
+        transform.position = Vector3.zero;
+        
+        _spriteRenderer.sharedMaterial.color = _originalColor;
+        _dissapearingState = MonsterState.None;
+        _dissapearing = false;
+        _alphaTime = 0f;
+        _alphaValue = 0f;
     }
 
     private void OnDisable()
@@ -86,7 +100,7 @@ public class Monster : MonoBehaviour
 
                 if (_alphaTime >= _dissapearingDuration) {
                     _alphaValue = 1f;
-                   finish = true;
+                    finish = true;
                 }
             }
 
@@ -101,16 +115,43 @@ public class Monster : MonoBehaviour
     {
         _currentState = newState;
         
-        // Debug.Log($"--- Mode: {_currentState.ToString()} ---");
+        Debug.Log($"--- Mode: {_currentState.ToString()} ---");
 
         switch (_currentState)
         {
+            case MonsterState.None:
+            {
+                _lungeAttack.StopAttacks();
+                _bulletShooter.StopAttacks();
+                _spawnBombs.StopAttacks();
+                // _spawnTVs.StopAttacks();
+
+                if (_dissapearing) {
+                    _dissapearingState = MonsterState.Idle;
+                }
+            }
+            break;
+
+            case MonsterState.Appearing:
+            {
+                _animator.Play("BossAppearing");
+            }
+            break;
+
             case MonsterState.Idle:
             {
                 _animator.Play("BossIdle");
-                _timer.StartCountDown(Random.Range(1f, 3f), () => {
-                    ChangeState(MonsterState.Preparing);
-                });
+
+                if (!_gameManager.GameFinished)
+                {
+                    _timer.StartCountDown(Random.Range(1f, 3f), () => {
+                        
+                        if (!_gameManager.GameFinished)
+                        {
+                            ChangeState(MonsterState.Preparing);
+                        }
+                    });
+                }
             }
             break;
 
@@ -136,7 +177,7 @@ public class Monster : MonoBehaviour
             {
                 if (transform.position != Vector3.zero)
                 {
-                   StartDissapearing(MonsterState.SpawningBombs);
+                    StartDissapearing(MonsterState.SpawningBombs);
                 }
                 else
                 {
@@ -145,18 +186,18 @@ public class Monster : MonoBehaviour
             }
             break;
 
-            case MonsterState.SpawningTVs:
-            {
-                if (transform.position != Vector3.zero)
-                {
-                   StartDissapearing(MonsterState.SpawningTVs);
-                }
-                else
-                {
-                    _spawnTVs.Activate(_character.transform, OnAttackFinished);
-                }
-            }
-            break;
+            // case MonsterState.SpawningTVs:
+            // {
+            //     if (transform.position != Vector3.zero)
+            //     {
+            //        StartDissapearing(MonsterState.SpawningTVs);
+            //     }
+            //     else
+            //     {
+            //         _spawnTVs.Activate(_character.transform, OnAttackFinished);
+            //     }
+            // }
+            // break;
         }
     }
 
@@ -167,8 +208,15 @@ public class Monster : MonoBehaviour
 
     private void StartAttack()
     {
-        _animator.Play("BossAttack");
-        ChangeState((MonsterState)Random.Range((int)MonsterState.Lunging, (int)MonsterState.TotalStates));
+        if (_gameManager.GameFinished)
+        {
+            ChangeState(MonsterState.None);
+        }
+        else
+        {
+            _animator.Play("BossAttack");
+            ChangeState((MonsterState)Random.Range((int)MonsterState.Lunging, (int)MonsterState.TotalStates));
+        }
     }
 
     private void StartDissapearing(MonsterState stateToGoAfter)
@@ -177,5 +225,10 @@ public class Monster : MonoBehaviour
         _dissapearingState = stateToGoAfter;
         _dissapearing = true;
         _alphaTime = 0f;
+    }
+
+    public void OnGameEnd(bool playerWon)
+    {
+        ChangeState(MonsterState.None);
     }
 }

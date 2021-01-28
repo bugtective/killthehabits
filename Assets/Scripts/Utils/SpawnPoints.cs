@@ -3,8 +3,8 @@ using UnityEngine;
 
 public class SpawnPoints : MonoBehaviour
 {
-   public List<Transform> GetSpawnPoints(List<int[]> pattersIdx)
-   {
+    public List<Transform> GetSpawnPoints(List<int[]> pattersIdx)
+    {
         List<Transform> points = new List<Transform>();
 
         int randomIdx = Random.Range(0, pattersIdx.Count);
@@ -15,10 +15,10 @@ public class SpawnPoints : MonoBehaviour
         }
 
         return points;
-   }
+    }
 
-   public List<Transform> GetSpawnPoints(int[] pattern)
-   {
+    public List<Transform> GetSpawnPoints(int[] pattern)
+    {
         List<Transform> points = new List<Transform>();
         
         foreach (var i in pattern)
@@ -27,5 +27,11 @@ public class SpawnPoints : MonoBehaviour
         }
 
         return points;
-   }
+    }
+
+    public Transform GetSpawnPoint()
+    {
+        int randomIdx = Random.Range(0, transform.childCount);
+        return transform.GetChild(randomIdx);
+    }
 }

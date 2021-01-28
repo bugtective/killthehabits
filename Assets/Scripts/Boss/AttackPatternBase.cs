@@ -29,4 +29,9 @@ public class AttackPattern : MonoBehaviour
         _onFinishCallback?.Invoke();
         enabled = false;
     }
+
+    public void StopAttacks()
+    {
+        enabled = false;
+    }
 }

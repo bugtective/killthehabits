@@ -9,6 +9,7 @@ TagManager:
   - Projectile
   - Bomb
   - Ray
+  - Energy
   layers:
   - Default
   - TransparentFX
