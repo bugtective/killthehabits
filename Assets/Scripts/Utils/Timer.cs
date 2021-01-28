@@ -9,6 +9,8 @@ public class Timer
     
     private Action _OnCountdownEnd = default;
 
+    public float ProgressPercentage => _currentTime / _duration;
+
     public void Update(float dt)
     {
         if (!_active)
