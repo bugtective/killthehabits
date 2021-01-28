@@ -39,10 +39,6 @@ public class SpawnBombs : AttackPattern
     private void OnEnable()
     {
         _currentRound = 0;
-
-        // Back to position
-        transform.position = Vector3.zero;
-
         _timer.StartCountDown(_startDelay, DropBombs);
     }
 

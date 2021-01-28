@@ -21,9 +21,6 @@ public class SpawnTVsAttack : AttackPattern
 
     private void OnEnable()
     {
-        // Back to position
-        transform.position = Vector3.zero;
-        
         _timer.StartCountDown(_startDelay, SpawnTVs);
     }
 
