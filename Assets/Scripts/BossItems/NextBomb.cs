@@ -6,6 +6,8 @@ public class NextBomb : PoolableObject
     [SerializeField] private float _explosionTime = 0.7f;
 
     [SerializeField] private GameObject _colliderObject = default;
+    [SerializeField] private GameObject _explosionObject = default;
+    [SerializeField] private GameObject _visualsObject = default;
 
     [SerializeField] private Transform _spriteMaskTransform = default;
 
@@ -16,6 +18,8 @@ public class NextBomb : PoolableObject
     public void Spawn(Vector3 position)
     {
         _colliderObject.SetActive(false);
+        _explosionObject.SetActive(false);
+        _visualsObject.SetActive(true);
         transform.position = position;
         _timer.StartCountDown(_waitTime, Explode);
     }
@@ -37,6 +41,8 @@ public class NextBomb : PoolableObject
     private void Explode()
     {
         _colliderObject.SetActive(true);
+        _explosionObject.SetActive(true);
+        _visualsObject.SetActive(false);
         _exploded = true;
         _timer.StartCountDown(_explosionTime, ReturnToPool);
     }

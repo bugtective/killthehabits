@@ -535,6 +535,7 @@ MonoBehaviour:
   _spawnTVs: {fileID: 303381702}
   _animator: {fileID: 686742591}
   _bossAnimationEvents: {fileID: 686742593}
+  _dissapearingDuration: 0.7
 --- !u!114 &303381699
 MonoBehaviour:
   m_ObjectHideFlags: 0
