@@ -90,6 +90,7 @@ public class GameManager : MonoBehaviour
 
         GameFinished = false;
 
+        _character.ChangeLooks(_playersAge);
         _boss.AwakeBoss();
 
         _musicAudioSource.Play();
@@ -157,7 +158,6 @@ public class GameManager : MonoBehaviour
         var prevAge = _playersAge;
         _playersAge += amount;
 
-
         if (prevAge < 30 && _playersAge >= 30)
         {
             _ageAnnouncement.Show("You're in your:\nThirties!");
@@ -167,6 +167,7 @@ public class GameManager : MonoBehaviour
         {
             _ageAnnouncement.Show("You're in your:\nForties!");
             _character.ReduceSpeed(_speedReduction / 2f);
+            _character.ChangeLooks(_playersAge);
         }
         else if (prevAge < 50 && _playersAge >= 50)
         {
@@ -177,6 +178,7 @@ public class GameManager : MonoBehaviour
         {
             _ageAnnouncement.Show("You're in your:\nSixties");
             _character.ReduceSpeed(_speedReduction);
+            _character.ChangeLooks(_playersAge);
         }
 
 

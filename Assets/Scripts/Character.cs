@@ -4,7 +4,10 @@ public class Character : MonoBehaviour
 {
     [SerializeField] private float _speed = 10f;
 
-    private SpriteRenderer _spriteRenderer = default;
+    public SpriteRenderer _youngSprite = default;
+    public SpriteRenderer _middleSprite = default;
+    public SpriteRenderer _oldSprite = default;
+
     private Rigidbody2D _rigidBody2D = default;
 
     private Vector3 _moveDir = default;
@@ -13,10 +16,15 @@ public class Character : MonoBehaviour
 
     void Start()
     {
-        _spriteRenderer = GetComponent<SpriteRenderer>();
         _rigidBody2D = GetComponent<Rigidbody2D>();
-
         _gameManager = GameManager.Instance;
+    }
+
+    public void ChangeLooks(int age)
+    {
+        _youngSprite.gameObject.SetActive(age < 40);
+        _middleSprite.gameObject.SetActive(age >= 40 && age < 60);
+        _oldSprite.gameObject.SetActive(age >= 60);
     }
 
     void Update()
@@ -43,7 +51,10 @@ public class Character : MonoBehaviour
         
         if (moveX != 0f)
         {
-            _spriteRenderer.flipX = moveX < 0f;
+            var flip =  moveX < 0f;
+            _youngSprite.flipX = flip;
+            _middleSprite.flipX = flip;
+            _oldSprite.flipX = flip;
         }
 
         _moveDir = new Vector3(moveX, moveY).normalized;

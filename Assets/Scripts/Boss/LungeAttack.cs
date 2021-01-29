@@ -13,6 +13,8 @@ public class LungeAttack : AttackPattern
     [SerializeField] private float _speed = 10f;
     [SerializeField] private int _attacksAmount = 3;
 
+    [SerializeField] private AudioSource _audioSource = default;
+
     private LungeState _currentState = LungeState.None;
     private Vector3 _positionToAttack = default;
     private int _currentAttack = 0;
@@ -48,7 +50,12 @@ public class LungeAttack : AttackPattern
                 if (_wallCollision || Vector3.Distance(transform.position, _positionToAttack) < 0.001f)
                 {
                     _currentAttack++;
-                    _wallCollision = false;
+
+                    if (_wallCollision)
+                    {
+                        _wallCollision = false;
+                    }
+
 
                     if (_currentAttack >= _attacksAmount)
                     {
@@ -70,6 +77,7 @@ public class LungeAttack : AttackPattern
     {
         _currentState = LungeState.Attacking;
         _positionToAttack = _target.position;
+        _audioSource.Play();
     }
 
     private void OnTriggerEnter2D(Collider2D collider)

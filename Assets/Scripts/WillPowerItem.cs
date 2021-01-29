@@ -4,6 +4,8 @@ using System;
 public class WillPowerItem : PoolableObject
 {   
     [SerializeField] private float _dissapearingTime = 5f;
+    [SerializeField] private BlinkObject _blinkObject = default;
+    [SerializeField] private GameObject _spriteObject = default;
     
     private Timer _timer = new Timer();
 
@@ -13,12 +15,19 @@ public class WillPowerItem : PoolableObject
     {
         transform.position = position;
         _onPickedUp = onPickedUp;
+        _blinkObject.enabled = false;
+        _spriteObject.SetActive(true);
         _timer.StartCountDown(_dissapearingTime, ReturnToPool);
     }
 
     private void Update()
     {
         _timer.Update(Time.deltaTime);
+
+        if (_timer.ProgressPercentage >= 0.7 && !_blinkObject.enabled)
+        {
+            _blinkObject.enabled = true;
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D collider)
