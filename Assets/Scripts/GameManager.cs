@@ -33,8 +33,15 @@ public class GameManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _willpowerText = default;
     [SerializeField] private AgeAnnouncement _ageAnnouncement = default;
 
+    [SerializeField] private GameObject _winScreen = default;
+    [SerializeField] private GameObject _loseScreen = default;
+    [SerializeField] private GameObject _hud = default;
+    [SerializeField] private GameObject _mainMenu = default;
+    [SerializeField] private TextMeshProUGUI _winMessage = default;
+
     [Header("Sound")]
     [SerializeField] private AudioSource _willpowerAudioSource = default;
+    [SerializeField] private AudioSource _musicAudioSource = default;
 
     private Timer _yearsTimer = new Timer();
     private Timer _willPowerTimer = new Timer();
@@ -46,6 +53,8 @@ public class GameManager : MonoBehaviour
     private static readonly object padlock = new object();
 
     public bool GameFinished {get; private set;}
+
+    private bool _mainMenuOn = true;
 
     public static GameManager Instance
     {
@@ -66,28 +75,65 @@ public class GameManager : MonoBehaviour
     {
         _playersAge = _initialAge;
         _currentWillPower = 0;
+        _mainMenuOn = false;
 
         _yearsTimer.StartCountDown(_timeForYearIncrement, ReceiveDamage);
         _willPowerTimer.StartCountDown(_timeForWillpower, SpawnWillPower);
+
+        _mainMenu.SetActive(false);
+        _winScreen.SetActive(false);
+        _loseScreen.SetActive(false);
+
+        _hud.SetActive(true);
 
         UpdateUI();
 
         GameFinished = false;
 
         _boss.AwakeBoss();
+
+        _musicAudioSource.Play();
+    }
+
+    private void GameOver(bool playerWon)
+    {
+        GameFinished = true;
+        _boss.OnGameEnd(playerWon);
+
+        _winScreen.SetActive(playerWon);
+        _loseScreen.SetActive(!playerWon);
+
+        if (playerWon)
+        {
+            _winMessage.text = $"You beat your binging habit at {_playersAge}!";
+        }
+        
+        _hud.SetActive(false);
+        _ageAnnouncement.gameObject.SetActive(false);
+
+        _musicAudioSource.Stop();
     }
 
 
     private void Start()
     {
-        RestartGame();
+        _mainMenu.SetActive(true);
+        _mainMenuOn = true;
     }
 
     private void Update()
     {
-        if (GameFinished)
+        if (_mainMenuOn)
         {
-            if (Input.GetKey(KeyCode.R))
+            if (Input.GetKey(KeyCode.Return) || Input.GetKey(KeyCode.KeypadEnter))
+            {
+                RestartGame();
+            }
+            return;
+        }
+        else if (GameFinished)
+        {
+            if (Input.GetKey(KeyCode.Return) || Input.GetKey(KeyCode.KeypadEnter))
             {
                 RestartGame();
             }
@@ -138,15 +184,13 @@ public class GameManager : MonoBehaviour
 
         if (_playersAge >= _deathAge)
         {
-            GameFinished = true;
-            _boss.OnGameEnd(playerWon : false);
-            Debug.Log("LOOSE :(");
+            GameOver(playerWon : false);
         }
     }
     
     private void SpawnWillPower()
     {
-        var point = _spawnPoints.GetSpawnPoint();
+        var point = _spawnPoints.GetSpawnPoint(_character.transform.position);
         var poolObject = _willpowerPool.GetObject();
         poolObject?.GetComponent<WillPowerItem>().Spawn(point.position, OnWillPowerPickUp);
         
@@ -162,9 +206,7 @@ public class GameManager : MonoBehaviour
 
         if (_currentWillPower >= _willpowerNeeded)
         {
-            GameFinished = true;
-            _boss.OnGameEnd(playerWon : true);
-            Debug.Log("WIN!!!!!!!");
+            GameOver(playerWon : true);
         }
     }
 

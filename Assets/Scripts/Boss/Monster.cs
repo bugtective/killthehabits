@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 public class Monster : MonoBehaviour
 {
@@ -43,6 +44,8 @@ public class Monster : MonoBehaviour
 
     private GameManager _gameManager = default;
 
+    private List<MonsterState> _firstAttacks = new List<MonsterState>();
+
     private void Awake()
     {
         _spriteRenderer = GetComponent<SpriteRenderer>();
@@ -58,6 +61,11 @@ public class Monster : MonoBehaviour
     {
         ChangeState(MonsterState.Appearing);
         transform.position = Vector3.zero;
+
+        _firstAttacks.Clear();
+        _firstAttacks.Add(MonsterState.ShootingPlays);
+        _firstAttacks.Add(MonsterState.Lunging);
+        _firstAttacks.Add(MonsterState.SpawningBombs);
         
         _spriteRenderer.sharedMaterial.color = _originalColor;
         _dissapearingState = MonsterState.None;
@@ -216,13 +224,22 @@ public class Monster : MonoBehaviour
         else
         {
             _animator.Play("BossAttack");
-            
+
             var newAttack = MonsterState.None;
-            do
+
+            if (_firstAttacks.Count > 0)
             {
-                newAttack = (MonsterState)Random.Range((int)MonsterState.Lunging, (int)MonsterState.TotalStates);
+                newAttack = _firstAttacks[0];
+                _firstAttacks.RemoveAt(0);
             }
-            while(newAttack == _lastAttack);
+            else
+            {
+                do
+                {
+                    newAttack = (MonsterState)Random.Range((int)MonsterState.Lunging, (int)MonsterState.TotalStates);
+                }
+                while(newAttack == _lastAttack);
+            }
             
             _lastAttack = newAttack;
             ChangeState(newAttack);

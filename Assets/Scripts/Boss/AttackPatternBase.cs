@@ -30,7 +30,7 @@ public class AttackPattern : MonoBehaviour
         enabled = false;
     }
 
-    public void StopAttacks()
+    public virtual void StopAttacks()
     {
         enabled = false;
     }

@@ -54,4 +54,12 @@ public class ObjectPool : MonoBehaviour
         poolObject.Take();
         return poolObject;
     }
+
+    public void ForceAllToGoBack()
+    {
+        foreach (var poolObject in _pool)
+        {
+            poolObject.ReturnToPool();
+        }
+    }
 }

@@ -29,9 +29,21 @@ public class SpawnPoints : MonoBehaviour
         return points;
     }
 
-    public Transform GetSpawnPoint()
+    public Transform GetSpawnPoint(Vector3 avoidPosition)
     {
-        int randomIdx = Random.Range(0, transform.childCount);
-        return transform.GetChild(randomIdx);
+        int randomIdx = 0;
+        float distance = 0f;
+        Transform point = default;
+        
+        do
+        {
+            randomIdx = Random.Range(0, transform.childCount);
+            point = transform.GetChild(randomIdx);
+            distance = Vector3.Distance(avoidPosition, point.position);
+        }
+        while(distance <= 12f);
+
+        
+        return point;
     }
 }

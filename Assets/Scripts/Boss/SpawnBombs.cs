@@ -73,4 +73,10 @@ public class SpawnBombs : AttackPattern
             _timer.Reset(_timeBetweenRounds);
         }
     }
+
+    public override void StopAttacks()
+    {
+        _bombsPool.ForceAllToGoBack();
+        base.StopAttacks();
+    }
 }
