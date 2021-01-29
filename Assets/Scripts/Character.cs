@@ -77,4 +77,9 @@ public class Character : MonoBehaviour
             _gameManager.ReceiveDamage(_gameManager.RayDamage);
         }
     }
+
+    public void ReduceSpeed(float amount)
+    {
+        _speed -= amount;
+    }
 }

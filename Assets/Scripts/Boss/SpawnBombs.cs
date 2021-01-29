@@ -8,6 +8,7 @@ public class SpawnBombs : AttackPattern
 
     [SerializeField] private float _startDelay = 0.5f;
     [SerializeField] private float _timeBetweenRounds = 3f;
+    [SerializeField] private float _spawnDelay = 0.3f;
     
     [SerializeField] private int _rounds = 3;
 
@@ -51,10 +52,13 @@ public class SpawnBombs : AttackPattern
     {
         var points = _spawnPoints.GetSpawnPoints(_patternsIdx);
 
+        var delay = 0f;
         foreach (var point in points)
         {
             var poolObject = _bombsPool.GetObject();
-            poolObject?.GetComponent<NextBomb>().Spawn(point.position);
+            poolObject?.GetComponent<NextBomb>().Spawn(point.position, delay);
+
+            delay += _spawnDelay;
         }
         
         _currentRound++;

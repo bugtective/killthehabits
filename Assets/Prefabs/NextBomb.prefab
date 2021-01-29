@@ -127,8 +127,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a2531c808ac4f1449159356d3516f3b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _waitTime: 1.5
-  _explosionTime: 0.7
+  _waitTime: 1.2
+  _explosionTime: 0.5
   _colliderObject: {fileID: 4771181849340107341}
   _explosionObject: {fileID: 1552314609847108942}
   _visualsObject: {fileID: 1454893336726960597}
@@ -501,7 +501,7 @@ ParticleSystem:
     startSize:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 0.1
+      scalar: 0.2
       minScalar: 1
       maxCurve:
         serializedVersion: 2
@@ -963,7 +963,7 @@ ParticleSystem:
     sphericalDirectionAmount: 0
     randomPositionAmount: 0
     radius:
-      value: 1
+      value: 2.31
       mode: 0
       spread: 0
       speed:
@@ -5155,7 +5155,7 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 1.8
+  m_Radius: 2.44
 --- !u!1 &8445889352634693600
 GameObject:
   m_ObjectHideFlags: 0

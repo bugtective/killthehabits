@@ -4,6 +4,7 @@ using TMPro;
 public class GameManager : MonoBehaviour
 {
     [SerializeField] private Monster _boss = default;
+    [SerializeField] private Character _character = default;
 
     [SerializeField] private ObjectPool _willpowerPool = default;
     [SerializeField] private SpawnPoints _spawnPoints = default;
@@ -12,6 +13,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private int _deathAge = 100;
     [SerializeField] private int _yearIncrement = 1;
     [SerializeField] private float _timeForYearIncrement = 5f;
+    [SerializeField] private float _speedReduction = 1f;
 
     [SerializeField] private int _willpowerNeeded = 5;
     [SerializeField] private float _timeForWillpower = 5f;
@@ -29,9 +31,10 @@ public class GameManager : MonoBehaviour
     [Header("UI Elements")]
     [SerializeField] private TextMeshProUGUI _ageText = default;
     [SerializeField] private TextMeshProUGUI _willpowerText = default;
+    [SerializeField] private AgeAnnouncement _ageAnnouncement = default;
 
-    protected Timer _yearsTimer = new Timer();
-    protected Timer _willPowerTimer = new Timer();
+    private Timer _yearsTimer = new Timer();
+    private Timer _willPowerTimer = new Timer();
 
     private int _playersAge = 18;
     private int _currentWillPower = 0;
@@ -102,7 +105,31 @@ public class GameManager : MonoBehaviour
 
     public void ReceiveDamage(int amount)
     {
+        var prevAge = _playersAge;
         _playersAge += amount;
+
+
+        if (prevAge < 30 && _playersAge >= 30)
+        {
+            _ageAnnouncement.Show("You're in your:\nThirties!");
+            _character.ReduceSpeed(_speedReduction);
+        }
+        else if (prevAge < 40 && _playersAge >= 40)
+        {
+            _ageAnnouncement.Show("You're in your:\nForties!");
+            _character.ReduceSpeed(_speedReduction / 2f);
+        }
+        else if (prevAge < 50 && _playersAge >= 50)
+        {
+            _ageAnnouncement.Show("You're in your:\nFifties!");
+            _character.ReduceSpeed(_speedReduction / 2f);
+        }
+        else if (prevAge < 60 && _playersAge >= 60)
+        {
+            _ageAnnouncement.Show("You're in your:\nSixties");
+            _character.ReduceSpeed(_speedReduction);
+        }
+
 
         UpdateUI();
 

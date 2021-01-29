@@ -13,14 +13,32 @@ public class NextBomb : PoolableObject
 
     private Timer _timer = new Timer();
 
+    private bool _waitingToAppear = false;
     private bool _exploded = false;
 
-    public void Spawn(Vector3 position)
+    public void Spawn(Vector3 position, float delay = 0f)
     {
         _colliderObject.SetActive(false);
         _explosionObject.SetActive(false);
-        _visualsObject.SetActive(true);
+
         transform.position = position;
+
+        if (delay > 0f)
+        {
+            _waitingToAppear = true;
+            _visualsObject.SetActive(false);
+            _timer.StartCountDown(delay, Appear);
+        }
+        else
+        {
+            Appear();
+        }
+    }
+
+    private void Appear()
+    {
+        _waitingToAppear = false;
+        _visualsObject.SetActive(true);
         _timer.StartCountDown(_waitTime, Explode);
     }
 
@@ -34,7 +52,7 @@ public class NextBomb : PoolableObject
     {
         _timer.Update(Time.deltaTime);
 
-        if (!_exploded)
+        if (!_exploded && !_waitingToAppear)
             _spriteMaskTransform.localScale = new Vector3(Mathf.Lerp(1f, 0f, _timer.ProgressPercentage), 1f, 1f);
     }
 
