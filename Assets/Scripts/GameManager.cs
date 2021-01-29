@@ -33,6 +33,9 @@ public class GameManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _willpowerText = default;
     [SerializeField] private AgeAnnouncement _ageAnnouncement = default;
 
+    [Header("Sound")]
+    [SerializeField] private AudioSource _willpowerAudioSource = default;
+
     private Timer _yearsTimer = new Timer();
     private Timer _willPowerTimer = new Timer();
 
@@ -152,6 +155,7 @@ public class GameManager : MonoBehaviour
 
     public void OnWillPowerPickUp()
     {
+        _willpowerAudioSource.Play();
         _currentWillPower++;
 
         UpdateUI();

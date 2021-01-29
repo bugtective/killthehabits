@@ -16,6 +16,8 @@ public class BulletShooter : AttackPattern
     [Tooltip("Time interval between rounds")]
     [SerializeField] private float _roundTimeInterval = 1f;
 
+    [SerializeField] private AudioSource _shootAudioSource = default;
+
     private int _currentProjectileAmount = 0;
     private int _currentAttackRound = 0;
 
@@ -35,6 +37,7 @@ public class BulletShooter : AttackPattern
     {
         var poolObject = _playBulletsPool.GetObject();
         poolObject.GetComponent<PlayBullet>().Shoot(transform.position, _target);
+        _shootAudioSource.Play();
 
         _currentProjectileAmount++;
         

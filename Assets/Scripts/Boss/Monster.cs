@@ -30,6 +30,7 @@ public class Monster : MonoBehaviour
     private Timer _timer = new Timer();
 
     private MonsterState _currentState = MonsterState.None;
+    private MonsterState _lastAttack = MonsterState.None;
 
     [SerializeField] private float _dissapearingDuration = 0.7f;
 
@@ -115,7 +116,7 @@ public class Monster : MonoBehaviour
     {
         _currentState = newState;
         
-        Debug.Log($"--- Mode: {_currentState.ToString()} ---");
+        // Debug.Log($"--- Mode: {_currentState.ToString()} ---");
 
         switch (_currentState)
         {
@@ -215,7 +216,16 @@ public class Monster : MonoBehaviour
         else
         {
             _animator.Play("BossAttack");
-            ChangeState((MonsterState)Random.Range((int)MonsterState.Lunging, (int)MonsterState.TotalStates));
+            
+            var newAttack = MonsterState.None;
+            do
+            {
+                newAttack = (MonsterState)Random.Range((int)MonsterState.Lunging, (int)MonsterState.TotalStates);
+            }
+            while(newAttack == _lastAttack);
+            
+            _lastAttack = newAttack;
+            ChangeState(newAttack);
         }
     }
 
